@@ -14,28 +14,23 @@ def get_movies(
         with conn.cursor() as cur:
 
             base_query = """
-                        SELECT 
-                        m.movie_id, 
-                        m.title, 
-                        m.language, 
-                        m.imdb_rating,
-                        AVG(r.rating) AS avg_rating,
-                        COUNT(r.review_id) AS total_reviews
-                        FROM booking.movie m
-                        JOIN booking.show s ON s.movie_id = m.movie_id
-                        JOIN booking.screen sc ON sc.screen_id = s.screen_id
-                        JOIN booking.theatre t ON t.theatre_id = sc.theatre_id
-                        LEFT JOIN booking.review r ON r.movie_id = m.movie_id
-                        WHERE m.is_active = TRUE
-                        AND s.is_active = TRUE
-                        AND sc.is_active = TRUE
-                        AND t.is_active = TRUE
-                        """
-            
-            base_query += """
-                     GROUP BY m.movie_id
-                        ORDER BY m.movie_id
-                        """
+                SELECT 
+                    m.movie_id, 
+                    m.title, 
+                    m.language, 
+                    m.imdb_rating,
+                    AVG(r.rating) AS avg_rating,
+                    COUNT(r.review_id) AS total_reviews
+                FROM booking.movie m
+                JOIN booking.show s ON s.movie_id = m.movie_id
+                JOIN booking.screen sc ON sc.screen_id = s.screen_id
+                JOIN booking.theatre t ON t.theatre_id = sc.theatre_id
+                LEFT JOIN booking.review r ON r.movie_id = m.movie_id
+                WHERE m.is_active = TRUE
+                AND s.is_active = TRUE
+                AND sc.is_active = TRUE
+                AND t.is_active = TRUE
+            """
 
             params = []
 
@@ -53,24 +48,30 @@ def get_movies(
                 """
                 params.append(genre_id)
 
-            base_query += " ORDER BY m.movie_id"
+            base_query += """
+                GROUP BY m.movie_id
+                ORDER BY m.movie_id
+            """
 
             cur.execute(base_query, tuple(params))
             rows = cur.fetchall()
 
+
+    # ⚠️ THIS PART MUST BE OUTSIDE the 'with cursor' block
     movies = []
+
     for row in rows:
-        
-           movies.append({
-                    "movie_id": row[0],
-                    "title": row[1],
-                    "language": row[2],
-                    "imdb_rating": float(row[3]) if row[3] else None,
-                    "average_rating": float(row[4]) if row[4] else None,
-                    "total_reviews": row[5]
-})
+        movies.append({
+            "movie_id": row[0],
+            "title": row[1],
+            "language": row[2],
+            "imdb_rating": float(row[3]) if row[3] else None,
+            "average_rating": float(row[4]) if row[4] else None,
+            "total_reviews": row[5]
+        })
 
     return {"movies": movies}
+    
 @router.get("/{movie_id}")
 def get_movie_details(movie_id: int):
     with get_connection() as conn:

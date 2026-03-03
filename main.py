@@ -1,7 +1,15 @@
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from routers import cities, movies
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],  # frontend URL
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Include routers
 app.include_router(cities.router)
