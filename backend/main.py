@@ -1,10 +1,7 @@
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from routers import cities, movies
-import uvicorn
 
-if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=5000)
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
@@ -48,3 +45,9 @@ app.include_router(admin.router)
 def root():
     return {"message": "Movie Booking Backend Running 🚀"}
 
+import uvicorn
+import os
+
+if __name__ == "__main__":
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("main:app", host="0.0.0.0", port=port)
