@@ -1,25 +1,37 @@
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import API from "../api/axios";
 
 function Movies() {
-  const navigate = useNavigate();
+  const [movies, setMovies] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
-  const dummyMovies = [
-    { id: 1, title: "The Silent Throne" },
-    { id: 2, title: "Midnight Prophecy" },
-    { id: 3, title: "Echoes of Eternity" }
-  ];
+  useEffect(() => {
+    API.get("/movies")
+      .then((res) => {
+        setMovies(res.data);
+        setLoading(false);
+      })
+      .catch(() => {
+        setError(true);
+        setLoading(false);
+
+        // Fallback demo data
+        setMovies([
+          { id: 1, title: "The Emerald Throne" },
+          { id: 2, title: "Silver Shadows" },
+        ]);
+      });
+  }, []);
+
+  if (loading) return <p>Loading movies...</p>;
+  if (error) return <p>Backend offline. Showing demo data.</p>;
 
   return (
-    <div className="container">
-      <h1>Now Showing</h1>
-
-      {dummyMovies.map((movie) => (
-        <div className="card" key={movie.id}>
-          <h3>{movie.title}</h3>
-          <button onClick={() => navigate("/shows")}>
-            View Shows
-          </button>
-        </div>
+    <div>
+      <h2>Movies</h2>
+      {movies.map((m) => (
+        <div key={m.id}>{m.title}</div>
       ))}
     </div>
   );
