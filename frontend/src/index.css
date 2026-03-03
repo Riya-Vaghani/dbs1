@@ -1,0 +1,64 @@
+body {
+  margin: 0;
+  background: linear-gradient(180deg, #0d0f0d, #1a1f1a);
+  color: #dcdcdc;
+  font-family: "Cinzel", serif;
+}
+
+.navbar {
+  background-color: #111;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 2px solid #2e8b57;
+}
+
+.logo {
+  color: #2e8b57;
+}
+
+nav a {
+  margin-left: 20px;
+  text-decoration: none;
+  color: silver;
+  font-weight: bold;
+}
+
+nav a.active {
+  border-bottom: 2px solid #2e8b57;
+}
+
+.page {
+  padding: 40px;
+}
+
+.card {
+  background-color: #1c2b1c;
+  border: 1px solid #2e8b57;
+  padding: 20px;
+  margin: 10px 0;
+  border-radius: 8px;
+}
+
+button {
+  background-color: #1c2b1c;
+  border: 1px solid #2e8b57;
+  color: silver;
+  padding: 10px 20px;
+  cursor: pointer;
+  transition: 0.3s ease;
+  margin-top: 10px;
+}
+
+button:hover {
+  background-color: #2e8b57;
+  color: black;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  border-top: 1px solid #2e8b57;
+  margin-top: 40px;
+}
